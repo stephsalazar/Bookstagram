@@ -1,4 +1,4 @@
-# Stephbook
+# Bookstagram
 
 ## Características del proyecto
 - [ ] Registro e ingreso de usuarios (Respectivas validaciones)
