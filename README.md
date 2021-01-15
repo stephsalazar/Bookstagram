@@ -1,4 +1,4 @@
-# Reactibook
+# Stephbook
 
 ## Características del proyecto
 - [ ] Registro e ingreso de usuarios (Respectivas validaciones)
