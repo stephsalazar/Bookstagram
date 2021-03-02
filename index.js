@@ -26,70 +26,15 @@ app.get('/', function(req, res) {
   res.send(response);
 });
 
-app.get('/user', function (req, res) {
-  response = {
-    error: false,
-    code: 200,
-    message: ''
-  };
-  
-  if(user.name === '' || user.lastname === '') {
-    response = {
-      error: true,
-      code: 501,
-      message: 'El usuario no ha sido creado'
-    };
-  } else {
+// Usando app.route(), puedo agrupar distintos métodos que responden a una misma URL
+app.route('/user')
+  .get('/user', function (req, res) {
     response = {
       error: false,
       code: 200,
-      message: 'Respuesta del usuario',
-      response: user
+      message: ''
     };
-  }
-
-  res.send(response);
-});
-
-app.post('/user', function (req, res) {
-  if(!req.body.name || !req.body.lastname) {
-    response = {
-      error: true,
-      code: 502,
-      message: 'El campo name y lastname son requeridos'
-    };
-  } else {
-    if(user.name !== '' || user.lastname !== '') {
-      response = {
-        error: true,
-        code: 503,
-        message: 'El usuario ya fue creado previamente'
-      };
-    } else {
-      user = {
-        name: req.body.name,
-        lastname: req.body.lastname
-      };
-      response = {
-        error: false,
-        code: 200,
-        message: 'Usuario creado',
-        response: user
-      };
-    }
-  }
- 
-  res.send(response);
-});
-
-app.put('/user', function (req, res) {
-  if(!req.body.name || !req.body.lastname) {
-    response = {
-      error: true,
-      code: 502,
-      message: 'El campo name y lastname son requeridos'
-    };
-  } else {
+    
     if(user.name === '' || user.lastname === '') {
       response = {
         error: true,
@@ -97,43 +42,97 @@ app.put('/user', function (req, res) {
         message: 'El usuario no ha sido creado'
       };
     } else {
-      user = {
-        name: req.body.name,
-        lastname: req.body.lastname
-      };
       response = {
         error: false,
         code: 200,
-        message: 'Usuario actualizado',
+        message: 'Respuesta del usuario',
         response: user
       };
     }
-  }
 
-  res.send(response);
-});
+    res.send(response);
+  })
+  .post('/user', function (req, res) {
+    if(!req.body.name || !req.body.lastname) {
+      response = {
+        error: true,
+        code: 502,
+        message: 'El campo name y lastname son requeridos'
+      };
+    } else {
+      if(user.name !== '' || user.lastname !== '') {
+        response = {
+          error: true,
+          code: 503,
+          message: 'El usuario ya fue creado previamente'
+        };
+      } else {
+        user = {
+          name: req.body.name,
+          lastname: req.body.lastname
+        };
+        response = {
+          error: false,
+          code: 200,
+          message: 'Usuario creado',
+          response: user
+        };
+      }
+    }
+  
+    res.send(response);
+  })
+  .put('/user', function (req, res) {
+    if(!req.body.name || !req.body.lastname) {
+      response = {
+        error: true,
+        code: 502,
+        message: 'El campo name y lastname son requeridos'
+      };
+    } else {
+      if(user.name === '' || user.lastname === '') {
+        response = {
+          error: true,
+          code: 501,
+          message: 'El usuario no ha sido creado'
+        };
+      } else {
+        user = {
+          name: req.body.name,
+          lastname: req.body.lastname
+        };
+        response = {
+          error: false,
+          code: 200,
+          message: 'Usuario actualizado',
+          response: user
+        };
+      }
+    }
 
-app.delete('/user', function (req, res) {
-  if(user.name === '' || user.lastname === '') {
-    response = {
-      error: true,
-      code: 501,
-      message: 'El usuario no ha sido creado'
-    };
-  } else {
-    response = {
-      error: false,
-      code: 200,
-      message: 'Usuario eliminado'
-    };
-    user = { 
-      name: '', 
-      lastname: '' 
-    };
-  }
+    res.send(response);
+  })
+  .delete('/user', function (req, res) {
+    if(user.name === '' || user.lastname === '') {
+      response = {
+        error: true,
+        code: 501,
+        message: 'El usuario no ha sido creado'
+      };
+    } else {
+      response = {
+        error: false,
+        code: 200,
+        message: 'Usuario eliminado'
+      };
+      user = { 
+        name: '', 
+        lastname: '' 
+      };
+    }
 
-  res.send(response);
-});
+    res.send(response);
+  });
 
 app.use(function(req, res, next) { // Manejo de error para ruta que no existe
   response = {
