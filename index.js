@@ -1,9 +1,12 @@
 const express = require("express"); // Facilita crear el servidor y realizar llamadas HTTP.
 const bodyParser = require('body-parser'); // Extrae los datos del body y los convierte en json
 const app = express(); // Inicializar express
+const mongoose = require('mongoose');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // Cuando el cliente haga una petición, indicará la cabecera Content-Type: application/json
+
+
 
 let user = {
   name:'',
@@ -144,6 +147,13 @@ app.use(function(req, res, next) { // Manejo de error para ruta que no existe
   res.status(404).send(response);
 });
 
-app.listen(3000, () => {
- console.log("El servidor está inicializado en el puerto 3000");
-});
+mongoose.connect('mongodb://localhost/user', (err, res) => {
+  if(err) {
+    console.log('ERROR: connecting to Database. ' + err);
+  }
+
+  app.listen(3000, () => {
+    console.log('Conexión exitosa con Database. ' + res);
+    console.log("El servidor está inicializado en el puerto 3000");
+   });
+})
