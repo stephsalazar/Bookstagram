@@ -1,16 +1,9 @@
-const express = require("express"); // Facilita crear el servidor y realizar llamadas HTTP.
-const bodyParser = require('body-parser'); // Extrae los datos del body y los convierte en json
-const app = express(); // Inicializar express
-const mongoose = require('mongoose');
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); // Cuando el cliente haga una petición, indicará la cabecera Content-Type: application/json
-
-
+// const mongoose = require('mongoose');
+const users = require('express').Router()
 
 let user = {
-  name:'',
-  lastname: ''
+  name:'ANA',
+  lastname: 'Steph'
 };
 
 let response = {
@@ -19,19 +12,10 @@ let response = {
   message: ''
 };
 
-app.get('/', function(req, res) {
-  response = {
-    error: true,
-    code: 200,
-    message: 'Punto de inicio'
-  };
 
-  res.send(response);
-});
-
-// Usando app.route(), puedo agrupar distintos métodos que responden a una misma URL
-app.route('/user')
-  .get('/user', function (req, res) {
+// Usando users.route(), puedo agrupar distintos métodos que responden a una misma URL
+users.route('/user')
+  .get(function (req, res) {
     response = {
       error: false,
       code: 200,
@@ -48,14 +32,14 @@ app.route('/user')
       response = {
         error: false,
         code: 200,
-        message: 'Respuesta del usuario',
+        message: 'Respuesta del usuario, segundo intento',
         response: user
       };
     }
 
     res.send(response);
   })
-  .post('/user', function (req, res) {
+  .post(function (req, res) {
     if(!req.body.name || !req.body.lastname) {
       response = {
         error: true,
@@ -85,7 +69,7 @@ app.route('/user')
   
     res.send(response);
   })
-  .put('/user', function (req, res) {
+  .put(function (req, res) {
     if(!req.body.name || !req.body.lastname) {
       response = {
         error: true,
@@ -115,7 +99,7 @@ app.route('/user')
 
     res.send(response);
   })
-  .delete('/user', function (req, res) {
+  .delete(function (req, res) {
     if(user.name === '' || user.lastname === '') {
       response = {
         error: true,
@@ -137,23 +121,4 @@ app.route('/user')
     res.send(response);
   });
 
-app.use(function(req, res, next) { // Manejo de error para ruta que no existe
-  response = {
-    error: true, 
-    code: 404, 
-    message: 'URL no encontrada'
-  };
-  
-  res.status(404).send(response);
-});
-
-mongoose.connect('mongodb://localhost/user', (err, res) => {
-  if(err) {
-    console.log('ERROR: connecting to Database. ' + err);
-  }
-
-  app.listen(3000, () => {
-    console.log('Conexión exitosa con Database. ' + res);
-    console.log("El servidor está inicializado en el puerto 3000");
-   });
-})
+module.exports = users
