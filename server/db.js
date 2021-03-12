@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/users'
+const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost/bookstagram'
 
 mongoose.connect(MONGO_URL)
 
